@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Test F" default="debug" basedir=".">
+	
+	<!-- This provides access to regular environment
+	variables using ${env.VARIABLE} -->
+	<property environment="env"/>
+
+	<!-- Needs FLEX_HOME poiting to the root folder of the FLEX SDK -->
+	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
+	
+	<!-- Common properties -->
+	<property file="properties/global.properties" />
+	<property name="src.classpath" value="src/" />
+	<property name="stats.classpath" value="lib/stats" />
+	<property name="document.root" value="${src.classpath}TestF.as" />
+	<property name="swf.output" value="bin/testf.swf" />
+	<property name="swf.size" value="500 500" />
+	<property name="swf.framerate" value="50" />
+	<property name="swf.color" value="0xffffff" />
+	<property name="swf.version" value="10.1" />
+	
+	<target name="debug">
+		<echo message="DEBUG" />
+		<antcall target="compile">
+			<param name="swf.debug" value="-debug" />
+			<param name="output.debug" value="true" />
+			<param name="output.testing" value="false" />
+			<param name="output.release" value="false" />
+		</antcall>
+	</target>
+
+	<target name="compile" >
+		<echo message="Calling MXMLC" />
+		<exec executable="${FLEX_HOME}/bin/mxmlc" failonerror="true">
+			<arg line="${document.root}" />
+			<arg line="-static-rsls"/>
+			<arg line="-debug"/>
+			<arg line="-o ${swf.output}" />
+			<arg line="-default-size ${swf.size}" />
+			<arg line="-default-frame-rate ${swf.framerate}" />
+			<arg line="-default-background-color ${swf.color}" />
+			<arg line="-sp ${src.classpath}" />
+			<arg line="-sp ${stats.classpath}" />
+			<arg line="-library-path ${FLEX_HOME}/frameworks/libs" />
+			<arg line="-target-player ${swf.version}" />
+		</exec>
+	</target>
+	
+</project>
