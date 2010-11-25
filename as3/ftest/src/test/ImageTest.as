@@ -8,7 +8,7 @@ package test
 	/**
 	 * @author Juan Delgado
 	 */
-	public class DrawingAPITest extends Test
+	public class ImageTest extends Test
 	{
 		private var timer : Timer;
 		
@@ -20,7 +20,7 @@ package test
 		
 		override public function getName() : String
 		{
-			return "DrawingAPITest";
+			return "ImageTest";
 		}
 		
 		override public function run() : void
@@ -53,7 +53,8 @@ package test
 			
 			for each(var circle : Circle in circles)
 			{
-				circle.x += (circle.xTo - circle.x) / 3;				circle.y += (circle.yTo - circle.y) / 3;
+				circle.x += (circle.xTo - circle.x) / 3;
+				circle.y += (circle.yTo - circle.y) / 3;
 
 				if(Math.abs(circle.x - circle.xTo) < 1)
 				{
@@ -79,7 +80,7 @@ package test
 			
 			removeEventListener(Event.ENTER_FRAME, update);
 			
-			result += "Total circles: " + circles.length;
+			result += "Total images: " + circles.length;
 			
 			circles = null;
 			
@@ -106,10 +107,11 @@ internal class Circle extends Sprite
 	
 	public var yTo : int = 0;
 	
+	[Embed(source="../assets/wikipedia.png")]
+	private var ImageClass : Class;
+	
 	public function Circle()
 	{
-		graphics.beginFill(Math.random() * 0xFFFFFF);
-		graphics.drawCircle(0, 0, 5);
-		graphics.endFill();
+		addChild(new ImageClass());
 	}
 }

@@ -61,6 +61,7 @@ package test
 			}
 			else
 			{
+				tests = null;
 				stop();
 			}
 		}

@@ -1,10 +1,11 @@
 package
 {
-	import test.MathTest;
-	import test.SystemTest;
 	import net.hires.debug.Stats;
 
 	import test.DrawingAPITest;
+	import test.ImageTest;
+	import test.MathTest;
+	import test.SystemTest;
 	import test.Test;
 	import test.TestRunner;
 
@@ -47,11 +48,11 @@ package
 			runner.addTest(new SystemTest());
 			runner.addTest(new MathTest());
 			runner.addTest(new DrawingAPITest());
+			runner.addTest(new ImageTest());
 			
 			stats = new Stats();
 			stats.x = (stage.stageWidth - stats.width) >> 1;			stats.y = (stage.stageHeight - stats.height) >> 1;
 						addChild(runner);
-			addChild(logField);
 			addChild(stats);
 			
 			runner.run();
@@ -61,6 +62,8 @@ package
 		{
 			removeChild(stats);
 			stats = null;
+			
+			addChild(logField);
 			
 			runner.removeEventListener(Test.DONE, testsFinished);
 			log(runner.getResult());

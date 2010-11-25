@@ -6,7 +6,7 @@ package test
 	 */
 	public class MathTest extends Test
 	{
-		private static const TOTAL_REPETITIONS : int = 1000000;
+		private static const TOTAL_REPETITIONS : int = 10000000;
 		
 		override public function run() : void
 		{
