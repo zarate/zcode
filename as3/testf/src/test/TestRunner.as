@@ -2,6 +2,8 @@ package test
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import test.common.ITest;
+	import test.common.Test;
 	
 	/**
 	 * @author Juan Delgado

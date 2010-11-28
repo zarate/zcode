@@ -1,6 +1,7 @@
 package test
 {
 	import flash.system.Capabilities;
+	import test.common.Test;
 	/**
 	 * @author Juan Delgado
 	 */

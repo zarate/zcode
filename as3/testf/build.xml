@@ -10,17 +10,21 @@
 	
 	<!-- Common properties -->
 	<property file="properties/global.properties" />
-	<property name="src.classpath" value="src/" />
+	<property name="src.classpath" value="src" />
+	<property name="pre.src.classpath" value="build/src" />
 	<property name="stats.classpath" value="lib/stats" />
-	<property name="document.root" value="${src.classpath}TestF.as" />
-	<property name="swf.output" value="bin/testf.swf" />
+	<property name="document.root" value="${pre.src.classpath}/TestF.as" />
+	<property name="tests.folder" value="${pre.src.classpath}/test" />
+	<property name="output.folder" value="build/bin" />
+	<property name="tests.xml" value="${output.folder}/tests.xml"/>
+	<property name="swf.output" value="${output.folder}/testf.swf" />
 	<property name="swf.size" value="500 500" />
 	<property name="swf.framerate" value="50" />
 	<property name="swf.color" value="0xffffff" />
 	<property name="swf.version" value="10.1" />
 	
 	<target name="debug">
-		<echo message="DEBUG" />
+		<antcall target="preprocess"/>
 		<antcall target="compile">
 			<param name="swf.debug" value="-debug" />
 			<param name="output.debug" value="true" />
@@ -28,7 +32,17 @@
 			<param name="output.release" value="false" />
 		</antcall>
 	</target>
-
+	
+	<target name="preprocess">
+		<exec executable="tools/preprocess/bin/preprocess-linux" failonerror="true">
+			<arg line="${src.classpath}" />
+			<arg line="${pre.src.classpath}" />
+			<arg line="${tests.folder}"/>
+			<arg line="${tests.xml}"/>
+			<arg line="${document.root}" />
+		</exec>
+	</target>
+	
 	<target name="compile" >
 		<echo message="Calling MXMLC" />
 		<exec executable="${FLEX_HOME}/bin/mxmlc" failonerror="true">
@@ -39,7 +53,7 @@
 			<arg line="-default-size ${swf.size}" />
 			<arg line="-default-frame-rate ${swf.framerate}" />
 			<arg line="-default-background-color ${swf.color}" />
-			<arg line="-sp ${src.classpath}" />
+			<arg line="-sp ${pre.src.classpath}" />
 			<arg line="-sp ${stats.classpath}" />
 			<arg line="-library-path ${FLEX_HOME}/frameworks/libs" />
 			<arg line="-target-player ${swf.version}" />

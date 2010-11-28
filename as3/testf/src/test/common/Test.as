@@ -1,4 +1,4 @@
-package test
+package test.common
 {
 	import flash.display.Sprite;
 	import flash.events.Event;

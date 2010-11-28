@@ -4,6 +4,7 @@ package test
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
+	import test.common.Test;
 
 	/**
 	 * @author Juan Delgado

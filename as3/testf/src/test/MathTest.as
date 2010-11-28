@@ -1,5 +1,6 @@
 package test
 {
+	import test.common.Test;
 
 	/**
 	 * @author Juan Delgado

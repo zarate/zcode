@@ -1,13 +1,5 @@
 package
 {
-	import net.hires.debug.Stats;
-
-	import test.ITest;
-	import test.Test;
-	import test.TestRunner;
-
-	import ui.LogField;
-
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -16,6 +8,11 @@ package
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.getDefinitionByName;
+	import net.hires.debug.Stats;
+	import test.TestRunner;
+	import test.common.ITest;
+	import test.common.Test;
+	import ui.LogField;
 
 	/**
 	 * @author Juan Delgado
@@ -32,10 +29,10 @@ package
 		
 		private const TESTS_XML : String = "tests.xml";
 		
-		// Now that tests are defined in an XML, we need
+		// Tests are defined in a XML, we need
 		// to force the compiler to compile these classes.
-		// TODO: autogenerate
-		private var force1 : test.DrawingAPITest;		private var force2 : test.ImageTest;		private var force3 : test.MathTest;		private var force4 : test.SystemTest;
+		// See tools/preprocess for more info
+// ::forcedImports::
 		
 		public function TestF()
 		{
