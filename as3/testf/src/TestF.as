@@ -2,10 +2,7 @@ package
 {
 	import net.hires.debug.Stats;
 
-	import test.DrawingAPITest;
-	import test.ImageTest;
-	import test.MathTest;
-	import test.SystemTest;
+	import test.ITest;
 	import test.Test;
 	import test.TestRunner;
 
@@ -15,6 +12,10 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.utils.getDefinitionByName;
 
 	/**
 	 * @author Juan Delgado
@@ -25,9 +26,16 @@ package
 		
 		private var runner : TestRunner;
 		
+		private var stats : Stats;
+		
 		private const VERSION : String = "0.1";
 		
-		private var stats : Stats;
+		private const TESTS_XML : String = "tests.xml";
+		
+		// Now that tests are defined in an XML, we need
+		// to force the compiler to compile these classes.
+		// TODO: autogenerate
+		private var force1 : test.DrawingAPITest;		private var force2 : test.ImageTest;		private var force3 : test.MathTest;		private var force4 : test.SystemTest;
 		
 		public function TestF()
 		{
@@ -39,20 +47,44 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			logField = new LogField();
+			addChild(logField);
 
 			log("Welcome to TestF (v" + VERSION + ")");
 			
-			runner = new TestRunner();
+			loadTests();
+		}
 
+		private function loadTests() : void
+		{
+			var loader : URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, testXmlLoaded);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, testXmlFailed);
+			loader.load(new URLRequest(TESTS_XML));
+		}
+
+		private function testXmlFailed(event : IOErrorEvent) : void
+		{
+			log("Cannot load tests xml: " + TESTS_XML);
+		}
+
+		private function testXmlLoaded(event : Event) : void
+		{
+			runner = new TestRunner();
 			runner.addEventListener(Test.DONE, testsFinished);
-			runner.addTest(new SystemTest());
-			runner.addTest(new MathTest());
-			runner.addTest(new DrawingAPITest());
-			runner.addTest(new ImageTest());
+			
+			var testsXml : XML = new XML(event.target["data"]);
+
+			for each(var testXml : XML in testsXml.test)
+			{
+				var ClassReference : Class = Class(getDefinitionByName(testXml.toString()));
+				runner.addTest(ITest(new ClassReference()));
+			}
 			
 			stats = new Stats();
-			stats.x = (stage.stageWidth - stats.width) >> 1;			stats.y = (stage.stageHeight - stats.height) >> 1;
-						addChild(runner);
+			stats.x = (stage.stageWidth - stats.width) >> 1;
+			stats.y = (stage.stageHeight - stats.height) >> 1;
+			
+			addChild(runner);
 			addChild(stats);
 			
 			runner.run();
@@ -62,8 +94,6 @@ package
 		{
 			removeChild(stats);
 			stats = null;
-			
-			addChild(logField);
 			
 			runner.removeEventListener(Test.DONE, testsFinished);
 			log(runner.getResult());
