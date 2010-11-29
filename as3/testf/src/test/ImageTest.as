@@ -13,7 +13,7 @@ package test
 	{
 		private var timer : Timer;
 		
-		private var circles : Vector.<Circle> = new Vector.<Circle>();
+		private var images : Vector.<Image> = new Vector.<Image>();
 		
 		private var time : Number = -1;
 		
@@ -52,7 +52,7 @@ package test
 				}
 			}
 			
-			for each(var circle : Circle in circles)
+			for each(var circle : Image in images)
 			{
 				circle.x += (circle.xTo - circle.x) / 3;
 				circle.y += (circle.yTo - circle.y) / 3;
@@ -81,9 +81,9 @@ package test
 			
 			removeEventListener(Event.ENTER_FRAME, update);
 			
-			result += "Total images: " + circles.length;
+			result += "Total images: " + images.length;
 			
-			circles = null;
+			images = null;
 			
 			stop();
 		}
@@ -92,17 +92,18 @@ package test
 		{
 			for(var i : int = 0; i < 10; i++)
 			{
-				var circle : Circle = new Circle();
-				addChild(circle);
+				var image : Image = new Image();
+				addChild(image);
 				
-				circles.push(circle);
+				images.push(image);
 			}			
 		}
 	}
 }
+
 import flash.display.Sprite;
 
-internal class Circle extends Sprite
+internal class Image extends Sprite
 {
 	public var xTo : int = 0;
 	
@@ -111,7 +112,7 @@ internal class Circle extends Sprite
 	[Embed(source="../assets/wikipedia.png")]
 	private var ImageClass : Class;
 	
-	public function Circle()
+	public function Image()
 	{
 		addChild(new ImageClass());
 	}
