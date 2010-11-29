@@ -35,10 +35,10 @@ package test
 
 			addEventListener(Event.ENTER_FRAME, update);
 			
-			addCircles(null);
+			addImages(null);
 			
 			timer = new Timer(100);
-			timer.addEventListener(TimerEvent.TIMER, addCircles);
+			timer.addEventListener(TimerEvent.TIMER, addImages);
 			timer.start();
 		}
 
@@ -52,21 +52,21 @@ package test
 				}
 			}
 			
-			for each(var circle : Image in images)
+			for each(var image : Image in images)
 			{
-				circle.x += (circle.xTo - circle.x) / 3;
-				circle.y += (circle.yTo - circle.y) / 3;
+				image.x += (image.xTo - image.x) / 3;
+				image.y += (image.yTo - image.y) / 3;
 
-				if(Math.abs(circle.x - circle.xTo) < 1)
+				if(Math.abs(image.x - image.xTo) < 1)
 				{
-					circle.x = circle.xTo;
-					circle.xTo = Math.ceil(Math.random() * stage.stageWidth);
+					image.x = image.xTo;
+					image.xTo = Math.ceil(Math.random() * stage.stageWidth);
 				}
 
-				if(Math.abs(circle.y - circle.yTo) < 1)
+				if(Math.abs(image.y - image.yTo) < 1)
 				{
-					circle.y = circle.yTo;
-					circle.yTo = Math.ceil(Math.random() * stage.stageHeight);
+					image.y = image.yTo;
+					image.yTo = Math.ceil(Math.random() * stage.stageHeight);
 				}
 			}
 			
@@ -76,7 +76,7 @@ package test
 		private function exit() : void
 		{
 			timer.stop();
-			timer.removeEventListener(TimerEvent.TIMER, addCircles);
+			timer.removeEventListener(TimerEvent.TIMER, addImages);
 			timer = null;
 			
 			removeEventListener(Event.ENTER_FRAME, update);
@@ -88,7 +88,7 @@ package test
 			stop();
 		}
 
-		private function addCircles(event : TimerEvent) : void
+		private function addImages(event : TimerEvent) : void
 		{
 			for(var i : int = 0; i < 10; i++)
 			{
