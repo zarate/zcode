@@ -64,8 +64,9 @@ class Main
 		
 		var tests = xa.Search.search(testsFolder, filter);
 		
-		var TABS = "\t\t";
-		var forcedImports = TABS + "AUTO-GENERATED,  do not update by hand!\n";
+		var autoText = "AUTO-GENERATED,  do not update by hand!\n";
+		var forcedImports = "\t" + autoText;
+		var forcedVars = "\t\t" + autoText;
 		var testsXmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<tests>\n";
 		
 		for(i in 0...tests.length)
@@ -73,7 +74,8 @@ class Main
 			// line below extracts the classpath from the full path of the file
 			var classPath = tests[i].substr(preFolder.length + 1, tests[i].length - preFolder.length - 4).split(xa.System.getSeparator()).join(".");
 			
-			forcedImports += TABS + "private var force_" + i + ":" + classPath + ";\n";
+			forcedImports += "\timport " + classPath + ";\n";
+			forcedVars += "\t\tprivate var force_" + i + " : " + classPath + ";\n";
 			testsXmlString += "\t<test>" + classPath + "</test>\n";
 		}
 		
@@ -81,7 +83,7 @@ class Main
 		
 		var template = new haxe.Template(xa.File.read(documentRoot));
 		
-		var output  = template.execute({forcedImports: forcedImports});
+		var output  = template.execute({forcedImports: forcedImports, forcedVars: forcedVars});
 		
 		xa.File.write(documentRoot, output);
 		

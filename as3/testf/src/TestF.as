@@ -1,5 +1,15 @@
 package
 {
+	import net.hires.debug.Stats;
+
+	import test.common.ITest;
+	import test.common.Test;
+	import test.common.TestRunner;
+
+// ::forcedImports::
+	
+	import ui.LogField;
+
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -8,11 +18,6 @@ package
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.getDefinitionByName;
-	import net.hires.debug.Stats;
-	import test.TestRunner;
-	import test.common.ITest;
-	import test.common.Test;
-	import ui.LogField;
 
 	/**
 	 * @author Juan Delgado
@@ -32,7 +37,7 @@ package
 		// Tests are defined in a XML, we need
 		// to force the compiler to compile these classes.
 		// See tools/preprocess for more info
-// ::forcedImports::
+// ::forcedVars::
 		
 		public function TestF()
 		{
