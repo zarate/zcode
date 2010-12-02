@@ -1,23 +1,19 @@
 package test
 {
+	import test.common.TimeTest;
+
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import flash.utils.getTimer;
-	import test.common.Test;
 
 	/**
 	 * @author Juan Delgado
 	 */
-	public class ImageTest extends Test
+	public class ImageTest extends TimeTest
 	{
 		private var timer : Timer;
 		
 		private var images : Vector.<Image> = new Vector.<Image>();
-		
-		private var time : Number = -1;
-		
-		private var maxDelay : Number;
 		
 		override public function getName() : String
 		{
@@ -27,30 +23,15 @@ package test
 		override public function run() : void
 		{
 			super.run();
-			
-			// That's the time a frame would take to render at 10fps.
-			// So we are going to keep adding circles until we bring the player
-			// down to 10fps,
-			maxDelay = (1/10) * 1000;
-
-			addEventListener(Event.ENTER_FRAME, update);
-			
-			addImages(null);
-			
+					
 			timer = new Timer(100);
 			timer.addEventListener(TimerEvent.TIMER, addImages);
 			timer.start();
 		}
 
-		private function update(event : Event) : void
+		override protected function enterFrame(event : Event) : void
 		{
-			if(time != -1)
-			{
-				if(getTimer() - time > maxDelay)
-				{
-					exit();
-				}
-			}
+			super.enterFrame(event);
 			
 			for each(var image : Image in images)
 			{
@@ -69,23 +50,19 @@ package test
 					image.yTo = Math.ceil(Math.random() * stage.stageHeight);
 				}
 			}
-			
-			time = getTimer();
 		}
 
-		private function exit() : void
+		override protected function stop() : void
 		{
 			timer.stop();
 			timer.removeEventListener(TimerEvent.TIMER, addImages);
 			timer = null;
 			
-			removeEventListener(Event.ENTER_FRAME, update);
-			
 			result += "Total images: " + images.length;
 			
 			images = null;
 			
-			stop();
+			super.stop();
 		}
 
 		private function addImages(event : TimerEvent) : void

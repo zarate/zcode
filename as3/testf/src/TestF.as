@@ -44,6 +44,7 @@ package
 			super();
 			
 			// TODO: warn the user if debug version of the player
+			// TODO: allow passing xmlFalse when calling ant to prevent creating the tests.xml
 			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;

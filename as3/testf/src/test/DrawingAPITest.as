@@ -1,23 +1,19 @@
 package test
 {
+	import test.common.TimeTest;
+
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import flash.utils.getTimer;
-	import test.common.Test;
 
 	/**
 	 * @author Juan Delgado
 	 */
-	public class DrawingAPITest extends Test
+	public class DrawingAPITest extends TimeTest
 	{
 		private var timer : Timer;
 		
 		private var circles : Vector.<Circle> = new Vector.<Circle>();
-		
-		private var time : Number = -1;
-		
-		private var maxDelay : Number;
 		
 		override public function getName() : String
 		{
@@ -28,29 +24,14 @@ package test
 		{
 			super.run();
 			
-			// That's the time a frame would take to render at 10fps.
-			// So we are going to keep adding circles until we bring the player
-			// down to 10fps,
-			maxDelay = (1/10) * 1000;
-
-			addEventListener(Event.ENTER_FRAME, update);
-			
-			addCircles(null);
-			
 			timer = new Timer(100);
 			timer.addEventListener(TimerEvent.TIMER, addCircles);
 			timer.start();
 		}
 
-		private function update(event : Event) : void
+		override protected function enterFrame(event : Event) : void
 		{
-			if(time != -1)
-			{
-				if(getTimer() - time > maxDelay)
-				{
-					exit();
-				}
-			}
+			super.enterFrame(event);
 			
 			for each(var circle : Circle in circles)
 			{
@@ -68,23 +49,19 @@ package test
 					circle.yTo = Math.ceil(Math.random() * stage.stageHeight);
 				}
 			}
-			
-			time = getTimer();
 		}
 
-		private function exit() : void
+		override protected function stop() : void
 		{
 			timer.stop();
 			timer.removeEventListener(TimerEvent.TIMER, addCircles);
 			timer = null;
 			
-			removeEventListener(Event.ENTER_FRAME, update);
-			
 			result += "Total circles: " + circles.length;
 			
 			circles = null;
 			
-			stop();
+			super.stop();
 		}
 
 		private function addCircles(event : TimerEvent) : void
@@ -99,6 +76,7 @@ package test
 		}
 	}
 }
+
 import flash.display.Sprite;
 
 internal class Circle extends Sprite
