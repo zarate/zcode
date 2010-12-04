@@ -29,6 +29,7 @@ class Main
 		var testsFolder = args[2];
 		var testsXml = args[3];
 		var documentRoot = args[4];
+		var xmlOutput = (args[5] == "true");
 		
 		if(!xa.Folder.isFolder(srcFolder))
 		{
@@ -87,22 +88,25 @@ class Main
 		
 		xa.File.write(documentRoot, output);
 		
-		var xmlOutputBits = testsXml.split(xa.System.getSeparator());
-		var prevXmlOutput = "";
-		
-		for(i in 0...xmlOutputBits.length)
+		if(xmlOutput)
 		{
-			prevXmlOutput += xmlOutputBits[i];
+			var xmlOutputBits = testsXml.split(xa.System.getSeparator());
+			var prevXmlOutput = "";
 			
-			if(!xa.Folder.isFolder(prevXmlOutput) && prevXmlOutput.indexOf(".") == -1)
+			for(i in 0...xmlOutputBits.length)
 			{
-				xa.Folder.create(prevXmlOutput);
+				prevXmlOutput += xmlOutputBits[i];
+				
+				if(!xa.Folder.isFolder(prevXmlOutput) && prevXmlOutput.indexOf(".") == -1)
+				{
+					xa.Folder.create(prevXmlOutput);
+				}
+				
+				prevXmlOutput += xa.System.getSeparator();
 			}
 			
-			prevXmlOutput += xa.System.getSeparator();
+			xa.File.write(testsXml, testsXmlString);
 		}
-		
-		xa.File.write(testsXml, testsXmlString);
 	}
 	
 	private static function filter(path : String) : Bool
