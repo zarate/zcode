@@ -16,6 +16,8 @@ package test.common
 		
 		protected var endTime : int;
 		
+		protected var params : Vector.<String>;
+		
 		public function getResult() : String
 		{
 			return result;
@@ -29,6 +31,11 @@ package test.common
 		public function getName() : String
 		{
 			return "Test";
+		}
+		
+		public function setParams(params : Vector.<String>) : void
+		{
+			this.params = params;
 		}
 		
 		protected function stop() : void

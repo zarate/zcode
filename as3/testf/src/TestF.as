@@ -79,8 +79,36 @@ package
 
 			for each(var testXml : XML in testsXml.test)
 			{
-				var ClassReference : Class = Class(getDefinitionByName(testXml.toString()));
-				runner.addTest(ITest(new ClassReference()));
+				var testClassPath : String;
+				
+				var testParams : Vector.<String> = null;
+				
+				var xmlValue : String = testXml.toString();
+				
+				if(xmlValue.indexOf(" ") == -1)
+				{
+					testClassPath = xmlValue;
+				}
+				else
+				{
+					var bits : Array = xmlValue.split(" ");
+					
+					testClassPath = bits.shift();
+					
+					testParams = new Vector.<String>();
+					
+					while(bits.length > 0)
+					{
+						testParams.push(bits.shift());
+					}
+				}
+				
+				var ClassReference : Class = Class(getDefinitionByName(testClassPath));
+				
+				var testCase : ITest = ITest(new ClassReference());
+				testCase.setParams(testParams);
+				
+				runner.addTest(testCase);
 			}
 			
 			stats = new Stats();

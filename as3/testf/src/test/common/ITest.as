@@ -8,5 +8,6 @@ package test.common
 		function run() : void;
 		function getResult() : String;
 		function getName() : String;
+		function setParams(params : Vector.<String>) : void;
 	}
 }
