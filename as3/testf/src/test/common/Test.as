@@ -1,6 +1,6 @@
 package test.common
 {
-	import test.common.events.TestEvent;
+	import org.osflash.signals.Signal;
 
 	import flash.display.Sprite;
 	import flash.utils.getTimer;
@@ -39,6 +39,15 @@ package test.common
 		
 		/**
 		 * @inheritDoc
+		 */
+		protected var _finishedSignal : Signal = new Signal(ITest);
+		
+		/**
+		 * @inheritDoc
+		 */				protected var _updateSignal : Signal = new Signal(ITest, String);
+		
+		/**
+		 * @inheritDoc
 		 */		
 		public function getResult() : String
 		{
@@ -73,6 +82,22 @@ package test.common
 		}
 		
 		/**
+		 * @inheritDoc
+		 */
+		public function get finishedSignal() : Signal
+		{
+			return _finishedSignal;
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get updateSignal() : Signal
+		{
+			return _updateSignal;
+		}
+		
+		/**
 		 * Extending classes call stop() to stop the test. Calling stop
 		 * would stop the timer, generate the result and dispatch an event.
 		 * 
@@ -85,7 +110,7 @@ package test.common
 			endTime = getTimer();
 			result = getHeader() + result + getFooter();
 			
-			dispatchEvent(new TestEvent(TestEvent.DONE, this));
+			_finishedSignal.dispatch(this);
 		}
 		
 		/**

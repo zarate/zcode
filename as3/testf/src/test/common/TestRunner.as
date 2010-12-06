@@ -1,7 +1,5 @@
 package test.common
 {
-	import test.common.events.TestEvent;
-
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -73,8 +71,8 @@ package test.common
 			
 			var testCase : ITest = tests[index];
 			
-			Sprite(testCase).addEventListener(TestEvent.DONE, testFinised);
-			Sprite(testCase).addEventListener(TestEvent.UPDATE, testUpdate);
+			testCase.finishedSignal.addOnce(testFinised);
+			testCase.updateSignal.add(testUpdate);
 			
 			try
 			{
@@ -91,29 +89,19 @@ package test.common
 			}
 		}
 
-		private function testUpdate(event : TestEvent) : void
+		private function testUpdate(testCase : ITest, update : String) : void
 		{
-			// TODO: tried re-dispathching and cloning the event to no avail :/
-			
-			var update : TestEvent = new TestEvent(TestEvent.UPDATE, event.test);
-			update.textUpdate = event.textUpdate;
-			dispatchEvent(update);
+			_updateSignal.dispatch(testCase, update);
 		}
 		
-		private function testFinised(event : TestEvent) : void
+		private function testFinised(testCase : ITest) : void
 		{
-			var testCase : ITest = tests[index];
-			
-			Sprite(testCase).removeEventListener(TestEvent.DONE, testFinised);
-			Sprite(testCase).removeEventListener(TestEvent.UPDATE, testUpdate);
+			testCase.updateSignal.remove(testUpdate);
 			removeChild(Sprite(testCase));
 			
 			addResult(testCase.getResult());
 			
-			var updateEvent : TestEvent = new TestEvent(TestEvent.UPDATE, this);
-			updateEvent.textUpdate = testCase.getName() + " finished";
-
-			dispatchEvent(updateEvent);
+			_updateSignal.dispatch(testCase, testCase.getName() + " finished");
 			
 			nextTest();
 		}

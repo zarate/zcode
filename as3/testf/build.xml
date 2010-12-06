@@ -13,6 +13,7 @@
 	<property name="src.classpath" value="src" />
 	<property name="pre.src.classpath" value="build/src" />
 	<property name="stats.classpath" value="lib/stats" />
+	<property name="signals.classpath" value="lib/signals/0.8/src" />
 	<property name="document.root" value="${pre.src.classpath}/TestF.as" />
 	<property name="tests.folder" value="${pre.src.classpath}/test" />
 	<property name="output.folder" value="build/bin" />
@@ -56,6 +57,7 @@
 			<arg line="-default-background-color ${swf.color}" />
 			<arg line="-sp ${pre.src.classpath}" />
 			<arg line="-sp ${stats.classpath}" />
+			<arg line="-sp ${signals.classpath}" />
 			<arg line="-library-path ${FLEX_HOME}/frameworks/libs" />
 			<arg line="-target-player ${swf.version}" />
 		</exec>

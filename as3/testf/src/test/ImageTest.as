@@ -1,6 +1,5 @@
 package test
 {
-	import test.common.events.TestEvent;
 	import test.common.TimeTest;
 
 	import flash.events.Event;
@@ -78,10 +77,7 @@ package test
 
 			if(images.length % 1000 == 0)
 			{
-				var update : TestEvent = new TestEvent(TestEvent.UPDATE, this);
-				update.textUpdate = getName() + " " + images.length + " images and counting...";
-				
-				dispatchEvent(update);
+				_updateSignal.dispatch(this, getName() + " " + images.length + " images and counting...");
 			}
 		}
 	}

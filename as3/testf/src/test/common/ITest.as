@@ -1,5 +1,7 @@
 package test.common
 {
+	import org.osflash.signals.Signal;
+
 	import flash.events.IEventDispatcher;
 	
 	/**
@@ -10,6 +12,15 @@ package test.common
 	 */
 	public interface ITest extends IEventDispatcher
 	{
+		/**
+		 * Dispatched when the test has finished. Receives (ITest)
+		 */
+		function get finishedSignal() : Signal;
+		
+		/**
+		 * Dispatched when the test sends a text update. Receives (ITest, String)
+		 */		function get updateSignal() : Signal;
+		
 		/**
 		 * Call it for the test to being.
 		 */

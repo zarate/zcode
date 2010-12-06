@@ -4,7 +4,6 @@ package
 
 	import test.common.ITest;
 	import test.common.TestRunner;
-	import test.common.events.TestEvent;
 
 	import ui.LogField;
 
@@ -73,8 +72,8 @@ package
 		private function testXmlLoaded(event : Event) : void
 		{
 			runner = new TestRunner();
-			runner.addEventListener(TestEvent.DONE, testsFinished);
-			runner.addEventListener(TestEvent.UPDATE, runnerUpdate);
+			runner.finishedSignal.addOnce(testsFinished);
+			runner.updateSignal.add(runnerUpdate);
 			
 			var testsXml : XML = new XML(event.target["data"]);
 			
@@ -126,17 +125,17 @@ package
 			runner.run();
 		}
 
-		private function runnerUpdate(event : TestEvent) : void
+		private function runnerUpdate(testCase : ITest, update : String) : void
 		{
-			log(event.textUpdate);
+			log(update);
 		}
 
-		private function testsFinished(event : TestEvent) : void
+		private function testsFinished(testCase : ITest) : void
 		{
 			removeChild(stats);
 			stats = null;
 			
-			runner.removeEventListener(TestEvent.DONE, testsFinished);			runner.removeEventListener(TestEvent.UPDATE, runnerUpdate);
+			runner.updateSignal.remove(runnerUpdate);
 			log(runner.getResult());
 			
 			log("TestF FINISHED");
