@@ -1,7 +1,8 @@
 package test.common
 {
+	import test.common.events.TestEvent;
+
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -72,7 +73,8 @@ package test.common
 			
 			var testCase : ITest = tests[index];
 			
-			Sprite(testCase).addEventListener(Test.DONE, testFinised);
+			Sprite(testCase).addEventListener(TestEvent.DONE, testFinised);
+			Sprite(testCase).addEventListener(TestEvent.UPDATE, testUpdate);
 			
 			try
 			{
@@ -88,15 +90,30 @@ package test.common
 				testFinised(null);
 			}
 		}
+
+		private function testUpdate(event : TestEvent) : void
+		{
+			// TODO: tried re-dispathching and cloning the event to no avail :/
+			
+			var update : TestEvent = new TestEvent(TestEvent.UPDATE, event.test);
+			update.textUpdate = event.textUpdate;
+			dispatchEvent(update);
+		}
 		
-		private function testFinised(event : Event) : void
+		private function testFinised(event : TestEvent) : void
 		{
 			var testCase : ITest = tests[index];
 			
-			Sprite(testCase).removeEventListener(Test.DONE, testFinised);
+			Sprite(testCase).removeEventListener(TestEvent.DONE, testFinised);
+			Sprite(testCase).removeEventListener(TestEvent.UPDATE, testUpdate);
 			removeChild(Sprite(testCase));
 			
 			addResult(testCase.getResult());
+			
+			var updateEvent : TestEvent = new TestEvent(TestEvent.UPDATE, this);
+			updateEvent.textUpdate = testCase.getName() + " finished";
+
+			dispatchEvent(updateEvent);
 			
 			nextTest();
 		}

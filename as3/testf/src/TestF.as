@@ -3,11 +3,9 @@ package
 	import net.hires.debug.Stats;
 
 	import test.common.ITest;
-	import test.common.Test;
 	import test.common.TestRunner;
+	import test.common.events.TestEvent;
 
-// ::forcedImports::
-	
 	import ui.LogField;
 
 	import flash.display.Sprite;
@@ -18,6 +16,8 @@ package
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.getDefinitionByName;
+
+	// ::forcedImports::
 
 	/**
 	 * @author Juan Delgado
@@ -73,11 +73,16 @@ package
 		private function testXmlLoaded(event : Event) : void
 		{
 			runner = new TestRunner();
-			runner.addEventListener(Test.DONE, testsFinished);
+			runner.addEventListener(TestEvent.DONE, testsFinished);
+			runner.addEventListener(TestEvent.UPDATE, runnerUpdate);
 			
 			var testsXml : XML = new XML(event.target["data"]);
-
-			for each(var testXml : XML in testsXml.test)
+			
+			var testList : XMLList = testsXml.test;
+			
+			log(testList.length() + " tests found");
+			
+			for each(var testXml : XML in testList)
 			{
 				var testClassPath : String;
 				
@@ -121,13 +126,20 @@ package
 			runner.run();
 		}
 
-		private function testsFinished(event : Event) : void
+		private function runnerUpdate(event : TestEvent) : void
+		{
+			log(event.textUpdate);
+		}
+
+		private function testsFinished(event : TestEvent) : void
 		{
 			removeChild(stats);
 			stats = null;
 			
-			runner.removeEventListener(Test.DONE, testsFinished);
+			runner.removeEventListener(TestEvent.DONE, testsFinished);			runner.removeEventListener(TestEvent.UPDATE, runnerUpdate);
 			log(runner.getResult());
+			
+			log("TestF FINISHED");
 		}
 
 		private function log(text : String) : void

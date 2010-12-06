@@ -1,9 +1,9 @@
 package ui
 {
-	import flash.text.TextFormat;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 
 	/**
 	 * @author Juan Delgado
@@ -26,7 +26,7 @@ package ui
 
 		public function log(text : String) : void
 		{
-			field.text = text + "\n";
+			field.appendText(text + "\n");
 			field.scrollV = field.maxScrollV;
 		}
 		

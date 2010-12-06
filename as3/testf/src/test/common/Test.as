@@ -1,15 +1,14 @@
 package test.common
 {
+	import test.common.events.TestEvent;
+
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.utils.getTimer;
 	/**
 	 * @author Juan Delgado
 	 */
 	public class Test extends Sprite implements ITest
 	{
-		public static const DONE : String = "DONE";
-		
 		protected var result : String = "";
 		
 		protected var initTime : int;
@@ -43,7 +42,7 @@ package test.common
 			endTime = getTimer();
 			result = getHeader() + result + getFooter();
 			
-			dispatchEvent(new Event(DONE));
+			dispatchEvent(new TestEvent(TestEvent.DONE, this));
 		}
 		
 		protected function getHeader() : String
