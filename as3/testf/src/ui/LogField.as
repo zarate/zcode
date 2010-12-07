@@ -17,7 +17,8 @@ package ui
 			field = new TextField();
 			field.border = true;
 			field.multiline = field.wordWrap = true;
-			field.defaultTextFormat = new TextFormat(null, null, 0xff0000);
+			field.embedFonts = true;
+			field.defaultTextFormat = new TextFormat("GentiumBasic", 18, 0xFFFFFF);
 			
 			addChild(field);
 			
@@ -38,8 +39,23 @@ package ui
 
 		private function addedToStage(event : Event) : void
 		{
-			field.width = 300;
-			field.height = stage.stageHeight;
+			var totalWidth : int = Math.min(400, stage.stageWidth * .25);
+			
+			var totalHeight : int = int(stage.stageHeight * .9);
+
+			field.width = totalWidth;
+			field.height = totalHeight;
+			
+			var bg : Sprite = new Sprite();
+			bg.graphics.beginFill(0x000000, .7);
+			bg.graphics.drawRect(0, 0, totalWidth, totalHeight);
+			bg.graphics.endFill();
+			
+			addChild(bg);
+			swapChildren(bg, field);
 		}
+		
+		[Embed(source="../assets/fonts/GenBasR.ttf", fontFamily="GentiumBasic", embedAsCFF="false", mimeType="application/x-font")]
+		private var c4Regular : Class;
 	}
 }

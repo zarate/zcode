@@ -78,12 +78,17 @@ package test.common
 			{
 				addChild(Sprite(testCase));
 				
+				_updateSignal.dispatch(testCase, testCase.getName() + " started");
+				
 				testCase.run();
 			}
 			catch(e : Error)
 			{
-				addResult(testCase.getName() + " crashed :/");
+				var errorText : String = testCase.getName() + " crashed :/";
+				addResult(errorText);
 				addResult(e.getStackTrace());
+				
+				_updateSignal.dispatch(testCase, errorText);
 				
 				testFinised(null);
 			}
@@ -101,7 +106,7 @@ package test.common
 			
 			addResult(testCase.getResult());
 			
-			_updateSignal.dispatch(testCase, testCase.getName() + " finished");
+			_updateSignal.dispatch(testCase, testCase.getName() + " finished\n");
 			
 			nextTest();
 		}

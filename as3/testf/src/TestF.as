@@ -1,5 +1,6 @@
 package
 {
+
 	import net.hires.debug.Stats;
 
 	import test.common.ITest;
@@ -12,8 +13,12 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.KeyboardEvent;
+	import flash.events.TimerEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.ui.Keyboard;
+	import flash.utils.Timer;
 	import flash.utils.getDefinitionByName;
 
 	// ::forcedImports::
@@ -32,6 +37,10 @@ package
 		private const VERSION : String = "0.1";
 		
 		private const TESTS_XML : String = "tests.xml";
+
+		private var timer : Timer;
+		
+		private var countDown : int = 5;
 		
 		// Tests are defined in a XML, we need
 		// to force the compiler to compile these classes.
@@ -49,9 +58,13 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			logField = new LogField();
+			logField.x = logField.y = 10;
 			addChild(logField);
 
-			log("Welcome to TestF (v" + VERSION + ")");
+			log("Welcome to TestF (v" + VERSION + ")\n");
+			log("This log field would go away when tests start and come back when they are finished. You can toggle it at any time by pressing ENTER.\n");
+			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, toggleFurniture);
 			
 			loadTests();
 		}
@@ -79,7 +92,7 @@ package
 			
 			var testList : XMLList = testsXml.test;
 			
-			log(testList.length() + " tests found");
+			log(testList.length() + " tests found\n");
 			
 			for each(var testXml : XML in testList)
 			{
@@ -115,14 +128,32 @@ package
 				runner.addTest(testCase);
 			}
 			
-			stats = new Stats();
-			stats.x = (stage.stageWidth - stats.width) >> 1;
-			stats.y = (stage.stageHeight - stats.height) >> 1;
-			
 			addChild(runner);
+			
+			stats = new Stats();
 			addChild(stats);
 			
+			stats.x = (stage.stageWidth - stats.width) >> 1;
+			stats.y = (stage.stageHeight - stats.height) >> 1;
+
+			swapChildren(runner, logField);
+
+			timer = new Timer(1000, countDown);
+			timer.addEventListener(TimerEvent.TIMER, updateCountDown);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, startTests);
+			timer.start();
+		}
+
+		private function startTests(event : TimerEvent) : void
+		{
+			hideFurniture();
+			
 			runner.run();
+		}
+
+		private function updateCountDown(event : TimerEvent) : void
+		{
+			log("Starting in " + --countDown);
 		}
 
 		private function runnerUpdate(testCase : ITest, update : String) : void
@@ -139,6 +170,29 @@ package
 			log(runner.getResult());
 			
 			log("TestF FINISHED");
+			
+			showFurniture();
+		}
+
+		private function toggleFurniture(event : KeyboardEvent) : void
+		{
+			if(event.keyCode == Keyboard.ENTER)
+			{
+				logField.visible = !logField.visible;
+				stats.visible = logField.visible;
+			}
+		}
+
+		private function showFurniture() : void
+		{
+			logField.visible = true;
+			stats.visible = false;
+		}
+		
+		private function hideFurniture() : void
+		{
+			logField.visible = false;
+			stats.visible = false;
 		}
 
 		private function log(text : String) : void
