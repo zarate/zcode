@@ -30,11 +30,11 @@
 	<versionNumber>0.1</versionNumber>
 		         
 	<!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. Optional. -->
-	<!-- <versionLabel></versionLabel> -->
+	<versionLabel>0.1</versionLabel>
 
 	<!-- Description, displayed in the AIR application installer.
 	     May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<!-- <description></description> -->
+	<description>TestF, benchmark for Flash devices</description>
 
 	<!-- Copyright information. Optional -->
 	<!-- <copyright></copyright> -->
@@ -151,27 +151,22 @@
 	<!-- </fileTypes> -->
 
   <!-- Specify Android specific tags that get passed to AndroidManifest.xml file. -->
-  <!--<android> -->
-  <!--<manifestAdditions> -->
+  <android>
+  <manifestAdditions>
 
     <!-- Set the manifest properties in AndroidManifest.xml Optional. -->
-    <!--<manifest> -->
+    <manifest>
 
     <!-- Set the attributes for manifest. Optional -->
     <!-- <attribute name="android:installLocation" value="auto"/> -->
 
     <!-- Set the data part for manifest. Optional. -->
-    <!-- <data>
+    <data>
           <![CDATA[
-          <uses-permission android:name="android.permission.INTERNET"/>
-          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-          <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-          <uses-configuration android:reqFiveWayNav="true"/>
-          <supports-screens android:normalScreens="true"/>
-          <uses-feature android:required="true" android:name="android.hardware.touchscreen.multitouch"/>
+		<uses-permission android:name="android.permission.INTERNET"/>
           ]]>
-        </data> -->
-    <!--</manifest> -->
+        </data>
+    </manifest>
 
     <!-- Set the application properties in AndroidManifest.xml Optional. -->
     <!--<application> -->
@@ -202,8 +197,8 @@
          </data> -->
     <!-- </launcherActivity> -->
   
-    <!-- </manifestAdditions> -->
-    <!-- </android> -->
+    </manifestAdditions>
+    </android>
   <!-- End of the schema for adding the android specific tags in AndroidManifest.xml file -->
   
 </application>
