@@ -31,11 +31,6 @@ package test.common
 			nextTest();
 		}
 
-		override public function getResult() : String
-		{
-			return result;
-		}
-		
 		override public function getName() : String
 		{
 			return "TestRunner";
@@ -53,7 +48,7 @@ package test.common
 		private function nextTest() : void
 		{
 			index++;
-
+			
 			if(index < tests.length)
 			{
 				timer.start();
@@ -73,24 +68,20 @@ package test.common
 			
 			testCase.finishedSignal.addOnce(testFinised);
 			testCase.updateSignal.add(testUpdate);
+
+			addChild(Sprite(testCase));
+			
+			_updateSignal.dispatch(testCase, testCase.getName() + " started");
 			
 			try
 			{
-				addChild(Sprite(testCase));
-				
-				_updateSignal.dispatch(testCase, testCase.getName() + " started");
-				
 				testCase.run();
 			}
 			catch(e : Error)
 			{
-				var errorText : String = testCase.getName() + " crashed :/";
-				addResult(errorText);
-				addResult(e.getStackTrace());
-				
-				_updateSignal.dispatch(testCase, errorText);
-				
-				testFinised(null);
+				// TODO: maybe we should print out the stack trace as well
+				_updateSignal.dispatch(testCase, testCase.getName() + " crashed :/");
+				testFinised(testCase);
 			}
 		}
 

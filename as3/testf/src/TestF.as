@@ -84,6 +84,12 @@ package
 
 		private function testXmlLoaded(event : Event) : void
 		{
+			stats = new Stats();
+			addChild(stats);
+			
+			stats.x = (stage.stageWidth - stats.width) >> 1;
+			stats.y = (stage.stageHeight - stats.height) >> 1;
+			
 			runner = new TestRunner();
 			runner.finishedSignal.addOnce(testsFinished);
 			runner.updateSignal.add(runnerUpdate);
@@ -130,12 +136,6 @@ package
 			
 			addChild(runner);
 			
-			stats = new Stats();
-			addChild(stats);
-			
-			stats.x = (stage.stageWidth - stats.width) >> 1;
-			stats.y = (stage.stageHeight - stats.height) >> 1;
-
 			swapChildren(runner, logField);
 
 			timer = new Timer(1000, countDown);
@@ -164,9 +164,9 @@ package
 		private function testsFinished(testCase : ITest) : void
 		{
 			removeChild(stats);
-			stats = null;
 			
 			runner.updateSignal.remove(runnerUpdate);
+			
 			log(runner.getResult());
 			
 			log("TestF FINISHED");
