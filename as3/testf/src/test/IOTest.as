@@ -11,7 +11,7 @@ package test
 	 */
 	public class IOTest extends Test
 	{
-		private static const TOTAL_ITERATIONS : int = 10000;
+		private static const TOTAL_ITERATIONS : int = 1000;
 		
 		override public function getName() : String
 		{
