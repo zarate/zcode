@@ -39,10 +39,9 @@ package ui
 
 		private function addedToStage(event : Event) : void
 		{
-			var totalWidth : int = Math.min(400, stage.stageWidth * .25);
+			var totalWidth : int = stage.stageWidth * .9;
+			var totalHeight : int = stage.stageHeight * .9;
 			
-			var totalHeight : int = int(stage.stageHeight * .9);
-
 			field.width = totalWidth;
 			field.height = totalHeight;
 			

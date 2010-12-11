@@ -58,13 +58,12 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			logField = new LogField();
-			logField.x = logField.y = 10;
 			addChild(logField);
+			
+			logField.x = (stage.stageWidth - logField.width) >> 1;			logField.y = (stage.stageHeight - logField.height) >> 1;
 
 			log("Welcome to TestF (v" + VERSION + ")\n");
-			log("This log field would go away when tests start and come back when they are finished. You can toggle it at any time by pressing ENTER.\n");
-			
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, toggleFurniture);
+			log("This log field would go away when tests start and come back when they finish.\n");
 			
 			loadTests();
 		}
@@ -84,12 +83,6 @@ package
 
 		private function testXmlLoaded(event : Event) : void
 		{
-			stats = new Stats();
-			addChild(stats);
-			
-			stats.x = (stage.stageWidth - stats.width) >> 1;
-			stats.y = (stage.stageHeight - stats.height) >> 1;
-			
 			runner = new TestRunner();
 			runner.finishedSignal.addOnce(testsFinished);
 			runner.updateSignal.add(runnerUpdate);
@@ -146,7 +139,13 @@ package
 
 		private function startTests(event : TimerEvent) : void
 		{
-			hideFurniture();
+			stats = new Stats();
+			addChild(stats);
+			
+			stats.x = (stage.stageWidth - stats.width) >> 1;
+			stats.y = (stage.stageHeight - stats.height) >> 1;
+
+			logField.visible = false;
 			
 			runner.run();
 		}
@@ -170,29 +169,8 @@ package
 			log(runner.getResult());
 			
 			log("TestF FINISHED");
-			
-			showFurniture();
-		}
 
-		private function toggleFurniture(event : KeyboardEvent) : void
-		{
-			if(event.keyCode == Keyboard.ENTER)
-			{
-				logField.visible = !logField.visible;
-				stats.visible = logField.visible;
-			}
-		}
-
-		private function showFurniture() : void
-		{
 			logField.visible = true;
-			stats.visible = false;
-		}
-		
-		private function hideFurniture() : void
-		{
-			logField.visible = false;
-			stats.visible = false;
 		}
 
 		private function log(text : String) : void
