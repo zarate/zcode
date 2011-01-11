@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="Test F" default="debug" basedir=".">
+<project name="TestF" default="debug" basedir=".">
 	
-	<!-- This provides access to regular environment
-	variables using ${env.VARIABLE} -->
-	<property environment="env"/>
-
-	<!-- Needs FLEX_HOME poiting to the root folder of the FLEX SDK -->
-	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
+	<!-- Property files -->
+	<property file="properties/developer.properties" />
+	<property file="properties/default.properties" />
 	
-	<!-- Common properties -->
-	<property file="properties/global.properties" />
+	<!-- Paths and vars -->
 	<property name="src.classpath" value="src" />
 	<property name="pre.src.classpath" value="build/src" />
 	<property name="stats.classpath" value="lib/stats" />
@@ -23,10 +19,17 @@
 	<property name="swf.framerate" value="50" />
 	<property name="swf.color" value="0xffffff" />
 	<property name="swf.version" value="10.1" />
+	<property name="air.descriptor" value="testf-descriptor.xml"></property>
+	
+	<target name="compile-all">
+		<antcall target="debug" />
+		<antcall target="compile-android" />
+		<antcall target="compile-air" />
+	</target>
 	
 	<target name="debug">
 		<antcall target="preprocess"/>
-		<antcall target="compile">
+		<antcall target="compile-swf">
 			<param name="swf.debug" value="-debug" />
 			<param name="output.debug" value="true" />
 			<param name="output.testing" value="false" />
@@ -35,7 +38,7 @@
 	</target>
 	
 	<target name="preprocess">
-		<exec executable="tools/preprocess/bin/preprocess-linux" failonerror="true">
+		<exec executable="${preprocess.bin}" failonerror="true">
 			<arg line="${src.classpath}" />
 			<arg line="${pre.src.classpath}" />
 			<arg line="${tests.folder}"/>
@@ -45,8 +48,7 @@
 		</exec>
 	</target>
 	
-	<target name="compile" >
-		<echo message="Calling MXMLC" />
+	<target name="compile-swf" >
 		<exec executable="${FLEX_HOME}/bin/mxmlc" failonerror="true">
 			<arg line="${document.root}" />
 			<arg line="-static-rsls"/>
@@ -61,6 +63,35 @@
 			<arg line="-library-path ${FLEX_HOME}/frameworks/libs" />
 			<arg line="-library-path ${FLEX_HOME}/frameworks/libs/air/airglobal.swc" />
 			<arg line="-target-player ${swf.version}" />
+		</exec>
+	</target>
+	
+	<target name="compile-android">
+		<exec executable="${FLEX_HOME}/bin/adt" failonerror="true">
+			<arg line="-package" />
+			<arg line="-target apk" />
+			<arg line="-storetype pkcs12" />
+			<arg line="-keystore ${adl.cert}"/>
+			<arg line="-storepass ${adl.cert.password}"/>
+			<arg line="${android.installer}"/>
+			<arg line="${air.descriptor}"/>
+			<arg line="${swf.output}"/>
+			<arg line="${tests.xml}"/>
+		</exec>
+	</target>
+	
+	<target name="compile-air">
+		<!-- Please note that you cannot compile an AIR file if you are off line 
+		You need an internet connection so ADL can contact geotrust.com-->
+		<exec executable="${FLEX_HOME}/bin/adt" failonerror="true">
+			<arg line="-package"/>
+			<arg line="-storetype pkcs12" />
+			<arg line="-keystore ${adl.cert}"/>
+			<arg line="-storepass ${adl.cert.password}"/>
+			<arg line="${air.installer}"/>
+			<arg line="${air.descriptor}"/>
+			<arg line="${swf.output}"/>
+			<arg line="${tests.xml}"/>
 		</exec>
 	</target>
 	
