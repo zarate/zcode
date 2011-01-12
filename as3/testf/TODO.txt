@@ -7,4 +7,4 @@ Some TODO items, in no particular order:
 	* Technical device info that is not privacy related (ie: no IMEI, phone number, etc)
 * Documentation.
 * Being able to load an external SWF and run tests compiled in it (so people can easily extend the tests)
-* Be able to pass parameters from the xml to the tests.
+* Raise ActionScriipt execution limit.
