@@ -1,16 +1,14 @@
 package test.common
 {
-	import org.osflash.signals.Signal;
 
-	import flash.events.IEventDispatcher;
+	import org.osflash.signals.Signal;
 	
 	/**
 	 * Main interface for the tests to implement.
-	 * @see flash.events.IEventDispatcher
 	 * 
 	 * @author Juan Delgado
 	 */
-	public interface ITest extends IEventDispatcher
+	public interface ITest
 	{
 		/**
 		 * Dispatched when the test has finished. Receives (ITest)
