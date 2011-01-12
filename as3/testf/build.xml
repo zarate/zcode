@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="TestF" default="debug" basedir=".">
+<project name="TestF" default="compile-swf-debug" basedir=".">
+	
+	<!-- 
+	You can also call ant passing a parameter so the tests.xml is recreated:
+	ant -DxmlOutput=true 
+	-->
 	
 	<!-- Property files -->
 	<property file="properties/developer.properties" />
@@ -22,20 +27,24 @@
 	<property name="air.descriptor" value="testf-descriptor.xml"></property>
 	
 	<target name="compile-all">
-		<antcall target="debug" />
+		<antcall target="compile-swf-release" />
 		<antcall target="compile-android" />
 		<antcall target="compile-air" />
 	</target>
 	
-	<target name="debug">
+	<target name="compile-swf-debug">
 		<antcall target="preprocess"/>
 		<antcall target="compile-swf">
 			<param name="swf.debug" value="-debug" />
-			<param name="output.debug" value="true" />
-			<param name="output.testing" value="false" />
-			<param name="output.release" value="false" />
 		</antcall>
 	</target>
+	
+    <target name="compile-swf-release">
+		<antcall target="preprocess"/>
+		<antcall target="compile-swf">
+			<param name="swf.debug" value="" />
+		</antcall>
+    </target>
 	
 	<target name="preprocess">
 		<exec executable="${preprocess.bin}" failonerror="true">
@@ -52,7 +61,7 @@
 		<exec executable="${FLEX_HOME}/bin/mxmlc" failonerror="true">
 			<arg line="${document.root}" />
 			<arg line="-static-rsls"/>
-			<arg line="-debug"/>
+			<arg line="${swf.debug}"/>
 			<arg line="-o ${swf.output}" />
 			<arg line="-default-size ${swf.size}" />
 			<arg line="-default-frame-rate ${swf.framerate}" />
