@@ -54,6 +54,8 @@ class MyController implements haxigniter.server.Controller, implements haxe.rtti
 	// Debugging
 	public var debug : Debug;
 	
+	private var baseUrl : String;
+	
 	/////////////////////////////////////////////////////////////////
 	
 	// The application configuration file is static, since it used in main().
@@ -125,13 +127,18 @@ class MyController implements haxigniter.server.Controller, implements haxe.rtti
 		this.db = appDb;
 		this.debug = appDebug; // Will be used in this.trace() and this.log()
 		this.view = appView;
-
+		
 		// The session is restored from SessionObject, passing in the interface and the output type.
 		this.session = SessionObject.restore(appSession, config.Session);
 
 		// Set the default request handler to a RestHandler.
 		// See haxigniter.server.request.RestHandler class for documentation.
 		this.requestHandler = new RestHandler(this.config);
+		
+		// ADDED FOR TESTF
+		var url = new haxigniter.server.libraries.Url(this.config);
+		baseUrl = "http://" + php.Web.getHostName() + url.siteUrl() + "/";
+		this.view.assign('baseurl', baseUrl);
 	}
 	
 	///// Some useful trace/log methods /////////////////////////////
