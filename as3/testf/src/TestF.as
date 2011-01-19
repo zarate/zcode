@@ -1,6 +1,7 @@
 package
 {
 
+	import flash.display.LoaderInfo;
 	import net.hires.debug.Stats;
 
 	import test.common.ITest;
@@ -36,9 +37,11 @@ package
 		
 		private const VERSION : String = "0.1";
 		
-		private const TESTS_XML : String = "tests.xml";
+		private const DEFAULT_TESTS_XML : String = "tests.xml";
 
 		private var timer : Timer;
+		
+		private var testsXml : String;
 		
 		private var countDown : int = 5;
 		
@@ -62,6 +65,10 @@ package
 			log("Welcome to TestF (v" + VERSION + ")\n");
 			log("This log field would go away when tests start and come back when they finish.\n");
 			
+			var flashVars : Object = LoaderInfo(root.loaderInfo).parameters;
+
+			testsXml = (flashVars["fv_testsXml"] != null) ? flashVars["fv_testsXml"] : DEFAULT_TESTS_XML;
+			
 			loadTests();
 		}
 
@@ -70,12 +77,12 @@ package
 			var loader : URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, testXmlLoaded);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, testXmlFailed);
-			loader.load(new URLRequest(TESTS_XML));
+			loader.load(new URLRequest(testsXml));
 		}
 
 		private function testXmlFailed(event : IOErrorEvent) : void
 		{
-			log("Cannot load tests xml: " + TESTS_XML);
+			log("Cannot load tests xml: " + DEFAULT_TESTS_XML);
 		}
 
 		private function testXmlLoaded(event : Event) : void
