@@ -5,6 +5,8 @@ www/index.php
 www/index.n
 www/lib
 www/runtime
+www/assets/testf.swf
+www/assets/tests.xml
 
 # In case apache log files are put in a logs directory:
 logs/*
