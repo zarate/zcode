@@ -74,11 +74,6 @@ package test
 				
 				images.push(image);
 			}
-
-			if(images.length % 1000 == 0)
-			{
-				_updateSignal.dispatch(this, getName() + " " + images.length + " images and counting...");
-			}
 		}
 	}
 }
