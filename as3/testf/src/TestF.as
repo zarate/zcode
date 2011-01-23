@@ -1,7 +1,5 @@
 package
 {
-
-	import flash.display.LoaderInfo;
 	import net.hires.debug.Stats;
 
 	import test.common.ITest;
@@ -9,16 +7,18 @@ package
 
 	import ui.LogField;
 
+	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.KeyboardEvent;
 	import flash.events.TimerEvent;
 	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
-	import flash.ui.Keyboard;
+	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 	import flash.utils.Timer;
 	import flash.utils.getDefinitionByName;
 
@@ -35,15 +35,19 @@ package
 		
 		private var stats : Stats;
 		
-		private const VERSION : String = "0.1";
-		
-		private const DEFAULT_TESTS_XML : String = "tests.xml";
-
 		private var timer : Timer;
 		
 		private var testsXml : String;
 		
+		private var resultsGateway : String;
+		
 		private var countDown : int = 5;
+		
+		private const RESULTS_GATEWAY : String = ""; // TO BE DEFINED
+		
+		private const VERSION : String = "0.1";
+		
+		private const DEFAULT_TESTS_XML : String = "tests.xml";
 		
 		// Tests are defined in a XML, we need
 		// to force the compiler to compile these classes.
@@ -68,6 +72,7 @@ package
 			var flashVars : Object = LoaderInfo(root.loaderInfo).parameters;
 
 			testsXml = (flashVars["fv_testsXml"] != null) ? flashVars["fv_testsXml"] : DEFAULT_TESTS_XML;
+			resultsGateway = (flashVars["fv_resultsGateway"] != null) ? flashVars["fv_resultsGateway"] : RESULTS_GATEWAY;
 			
 			loadTests();
 		}
@@ -170,11 +175,36 @@ package
 			
 			runner.updateSignal.remove(runnerUpdate);
 			
+			postResults(runner.getResult());
+			
 			log(runner.getResult());
 			
 			log("TestF FINISHED");
 
 			logField.visible = true;
+		}
+
+		private function postResults(result : String) : void
+		{
+			if(resultsGateway == "" || resultsGateway == null)
+			{
+				log("Not posting results");
+				return;
+			}
+			
+			log("Posting results to: " + resultsGateway);
+			
+			var variables : URLVariables = new URLVariables();
+			variables.version = VERSION;
+			variables.result = result;
+			
+			var request : URLRequest = new URLRequest(resultsGateway);
+			request.method = URLRequestMethod.POST;
+			request.data = variables;
+			
+			var loader : URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.VARIABLES;
+			loader.load(request);
 		}
 
 		private function log(text : String) : void
