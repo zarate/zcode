@@ -27,6 +27,7 @@ import neko.Sys; import neko.Web;
 import controllers.Start;
 import controllers.Dev;
 import controllers.Test;
+import controllers.Gateway;
 
 
 class Config extends haxigniter.server.Config
