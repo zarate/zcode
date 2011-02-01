@@ -1,5 +1,6 @@
 package test.common
 {
+
 	import org.osflash.signals.Signal;
 
 	import flash.display.Sprite;
@@ -49,14 +50,14 @@ package test.common
 		/**
 		 * @inheritDoc
 		 */		
-		public function getResult() : String
+		public function getResult() : TestResult
 		{
-			return result;
+			return new TestResult(getName(), endTime - initTime, result);
 		}
 
 		/**
-		 * @inheritDoc
 		 * Extending classes must call super before executing their own code.
+		 * @inheritDoc
 		 */
 		public function run() : void
 		{
@@ -65,7 +66,14 @@ package test.common
 		
 		/**
 		 * @inheritDoc
+		 */
+		public function dispose() : void
+		{
+		}
+		
+		/**
 		 * Extending classes must override.
+		 * @inheritDoc
 		 */
 		public function getName() : String
 		{
@@ -108,25 +116,8 @@ package test.common
 		protected function stop() : void
 		{
 			endTime = getTimer();
-			result = getHeader() + result + getFooter();
 			
 			_finishedSignal.dispatch(this);
-		}
-		
-		/**
-		 * @return The header for the result string, typically he name and elapsed time. 
-		 */
-		protected function getHeader() : String
-		{
-			return "**************** " + getName() + ": " + (endTime - initTime) + "ms \n";
-		}
-		
-		/**
-		 * @return The footer for the result string, typically a blank line.
-		 */
-		protected function getFooter() : String
-		{
-			return "\n";
 		}
 	}
 }

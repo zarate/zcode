@@ -1,5 +1,6 @@
 package test.common
 {
+
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -11,10 +12,12 @@ package test.common
 	{
 		private var tests : Vector.<ITest> = new Vector.<ITest>();
 		
+		private var results : Vector.<TestResult> = new Vector.<TestResult>();
+		
 		private var index : int;
 		
 		private var timer : Timer;
-		
+			
 		public function addTest(testCase : ITest) : void
 		{
 			tests.push(testCase);
@@ -27,8 +30,15 @@ package test.common
 			timer = new Timer(1000);
 			timer.addEventListener(TimerEvent.TIMER, delay);
 			
-			index = -1;
+			index = -1; // -1 cause nextTest() always adds up, so we start at 0
 			nextTest();
+		}
+
+		override public function dispose() : void
+		{
+			tests = null;
+			
+			super.dispose();
 		}
 
 		override public function getName() : String
@@ -45,6 +55,11 @@ package test.common
 			super.stop();
 		}
 
+		public function getResults() : Vector.<TestResult>
+		{
+			return results;
+		}
+
 		private function nextTest() : void
 		{
 			index++;
@@ -55,7 +70,6 @@ package test.common
 			}
 			else
 			{
-				tests = null;
 				stop();
 			}
 		}
@@ -94,17 +108,14 @@ package test.common
 		{
 			testCase.updateSignal.remove(testUpdate);
 			removeChild(Sprite(testCase));
-			
-			addResult(testCase.getResult());
+
+			results.push(testCase.getResult());
 			
 			_updateSignal.dispatch(testCase, testCase.getName() + " finished\n");
 			
+			testCase.dispose();
+			
 			nextTest();
-		}
-		
-		private function addResult(result : String) : void
-		{
-			this.result += result;
-		}
+		}		
 	}
 }

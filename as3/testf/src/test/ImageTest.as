@@ -58,7 +58,7 @@ package test
 			timer.removeEventListener(TimerEvent.TIMER, addImages);
 			timer = null;
 			
-			result += "Total images: " + images.length;
+			result += "" + images.length;
 			
 			images = null;
 			

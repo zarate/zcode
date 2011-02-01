@@ -1,8 +1,10 @@
 package
 {
+
 	import net.hires.debug.Stats;
 
 	import test.common.ITest;
+	import test.common.TestResult;
 	import test.common.TestRunner;
 
 	import ui.LogField;
@@ -41,7 +43,7 @@ package
 		
 		private var resultsGateway : String;
 		
-		private var countDown : int = 5;
+		private var countDown : int = 4;
 		
 		private const RESULTS_GATEWAY : String = ""; // TO BE DEFINED
 		
@@ -67,7 +69,7 @@ package
 			logField.x = (stage.stageWidth - logField.width) >> 1;			logField.y = (stage.stageHeight - logField.height) >> 1;
 
 			log("Welcome to TestF (v" + VERSION + ")\n");
-			log("This log field would go away when tests start and come back when they finish.\n");
+			log("This log field goes away when tests start and comes back when they finish.\n");
 			
 			var flashVars : Object = LoaderInfo(root.loaderInfo).parameters;
 
@@ -174,29 +176,47 @@ package
 			removeChild(stats);
 			
 			runner.updateSignal.remove(runnerUpdate);
+
+			postResults();
+
+			var results : Vector.<TestResult> = runner.getResults();
 			
-			postResults(runner.getResult());
+			for each(var result : TestResult in results)
+			{
+				log("***** " + result.name + " (" + result.time + "ms) *****\n");
+				log(result.result);
+				log("\n");
+			}
 			
-			log(runner.getResult());
+			runner.dispose();
+			runner = null;
 			
 			log("TestF FINISHED");
-
+			
 			logField.visible = true;
 		}
 
-		private function postResults(result : String) : void
+		private function postResults() : void
 		{
 			if(resultsGateway == "" || resultsGateway == null)
 			{
-				log("Not posting results");
+				log("No result gateway found.\n");
 				return;
 			}
 			
-			log("Posting results to: " + resultsGateway);
-			
+			log("Posting results to: " + resultsGateway + "\n");
+
 			var variables : URLVariables = new URLVariables();
+			variables.result = "";
+			
+			var results : Vector.<TestResult> = runner.getResults();
+			
+			for each(var result : TestResult in results)
+			{
+				variables.result += result.name + "|" + result.time + "|" + result.result + "__________";
+			}
+			
 			variables.version = VERSION;
-			variables.result = result;
 			
 			var request : URLRequest = new URLRequest(resultsGateway);
 			request.method = URLRequestMethod.POST;

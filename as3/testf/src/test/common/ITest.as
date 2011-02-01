@@ -25,9 +25,14 @@ package test.common
 		function run() : void;
 		
 		/**
+		 * Call it to allow the test to clean up after run.
+		 */
+		function dispose() : void;
+		
+		/**
 		 * @return The result of the test as a String.
 		 */
-		function getResult() : String;
+		function getResult() : TestResult;
 		
 		/**
 		 * @return The name of the test.
