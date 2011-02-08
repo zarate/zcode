@@ -12,6 +12,8 @@ class Release
 	
 	private var flexHome : String;
 	
+	private var initialWd : String;
+	
 	// TODO: dont hardcode, pass it to the app, maybe in properties file
 	private static var GIT_REPO_PATH : String = "/home/juan/projects/zarate/zcode/git";
 	
@@ -27,6 +29,8 @@ class Release
 	
 	public function new()
 	{
+		initialWd = neko.Sys.getCwd();
+	
 		log("Welcome to TestF release generator!");
 		
 		parseParams();
@@ -51,9 +55,17 @@ class Release
 		
 		compile();
 		
+		compress();
+		
 		cleanup();
 		
 		log("Done!");
+	}
+
+	private function compress() : Void
+	{
+		xa.File.copy("docs/testf.apk", initialWd + xa.System.getSeparator() + "testf_" + version + ".apk");
+		xa.File.copy("docs/testf.air", initialWd + xa.System.getSeparator() + "testf_" + version + ".air");
 	}
 
 	private function compile() : Void
@@ -113,6 +125,10 @@ class Release
 		log("Setting up current working directory: " + cwd);
 		
 		neko.Sys.setCwd(cwd);
+		
+		// TODO: we need to tag here the repo and push with the version number and push it!
+		// git tag version
+		// git push --tags
 	}
 
 	private function readPropertiesFile() : Void
