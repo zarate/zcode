@@ -21,11 +21,15 @@ class Release
 	
 	private static var PARAM_VERSION = "-v";
 	
-	private static var PROPERTIES = "-p";
+	private static var PARAM_PROPERTIES = "-p";
 	
-	private static var MIN_AIR_VERSION : Float = 2.5;
+	private static var PARAM_HELP = "-h";
 	
-	private static var FLEX_HOME_PROPERTY : String = "FLEX_HOME";
+	private static var PARAM_HELP_EXTENDED = "-help";
+	
+	private static var MIN_AIR_VERSION = 2.5;
+	
+	private static var FLEX_HOME_PROPERTY = "FLEX_HOME";
 	
 	public function new()
 	{
@@ -37,12 +41,16 @@ class Release
 		
 		if(version == null)
 		{
-			exit("Could not find which version to release.");
+			log("Could not find which version to release.");
+			printHelp();
+			exit();
 		}
 		
 		if(propertiesFile == null)
 		{
-			exit("Could not find properties file");
+			log("Could not find properties file");
+			printHelp();
+			exit();
 		}
 		
 		readPropertiesFile();
@@ -127,6 +135,8 @@ class Release
 		neko.Sys.setCwd(cwd);
 		
 		// TODO: we need to tag here the repo and push with the version number and push it!
+		// WATCH OUT: create only if the tag doesnt exist
+		// git tag > lists all tags already in the repo
 		// git tag version
 		// git push --tags
 	}
@@ -243,6 +253,12 @@ class Release
 			params = params[0].split(" ");
 		}
 		
+		if(params.length <= 0)
+		{
+			printHelp();
+			exit();
+		}
+		
 		for(x in 0...params.length)
 		{
 			switch(params[x])
@@ -250,21 +266,35 @@ class Release
 				case PARAM_VERSION:
 					version = params[x+1];
 				
-				case PROPERTIES:
+				case PARAM_PROPERTIES:
 					propertiesFile = neko.FileSystem.fullPath(params[x+1]);
+					
+				case PARAM_HELP:
+					printHelp();
+					exit();
+					
+				case PARAM_HELP_EXTENDED:
+					printHelp();
+					exit();
 			}
 		}
 	}
 
 	private function printHelp() : Void
 	{
-		log("Usage");
+		log("Usage:");
 		log("release -v 0.1 -p path/to/developer.properties");
+		log("\t-v > version to release, will create a tag on the repo if it doesn't exist");
+		log("\t-p > path to a properties file. Read default properties file in docs folder for more info");
 	}
 
-	private function exit(txt : String) : Void
+	private function exit(?txt : String) : Void
 	{
-		log("ERROR: " + txt);
+		if(txt != null)
+		{
+			log("ERROR: " + txt);
+		}
+		
 		xa.Application.exit(1);
 	}
 
