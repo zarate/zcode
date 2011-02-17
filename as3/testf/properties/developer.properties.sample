@@ -3,8 +3,8 @@
 
 ############# MANDATORY #############
 
-# The root directory of the Flex Sdk. This path will be used to find compiler binaries, framework libraries
-# and anything else flex related.
+# The root directory of the Flex SDK. This path will be used to find compiler binaries, framework libraries
+# and anything else Flex related.
 FLEX_HOME=/home/flex
 
 # The path to the preprocess binary. All the binaries are in tools/preprocess/bin/*
