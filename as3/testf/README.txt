@@ -4,7 +4,7 @@ TestF is a benchmark for Flash devices running FlashPlayer >= 10.1.
 
 ** Running the benchmark
 
-Depending on the device your want to benchmark, you have several options:
+Depending on the device your want to test, you have several options:
 
 a) Run a simple swf.
 b) Run an AIR file.
@@ -23,4 +23,4 @@ Then:
 3) Call Ant either:
 	a) From Eclipse: drag build.xml to the Ant tab and double click on it.
 	b) From the console: browse to TestF's root folder and simply type "ant" (no quotes)
-	c) By the fault only the SWF is recompiled, so if you want to compile AIR or Android files call Ant specifiying the target. For example: ant compile-android. Values are compile-android, compile-air, compile-swf, compile-all
+	c) By default only the SWF is recompiled, so if you want to compile AIR or Android files call Ant specifiying the target. For example: ant compile-android. Values are compile-android, compile-air, compile-swf, compile-all
